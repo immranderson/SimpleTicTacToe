@@ -13,10 +13,12 @@ public class GUI extends JFrame implements ActionListener {
 	private JButton[][] buttonarray;
 	private JPanel master;
 	private Grid board;
+	private Logic logic;
 
 	public GUI(){
 
 		board = new Grid();
+		logic = new Logic(board);
 
 		master = new JPanel (new GridLayout(3,3));
 		buttonarray = new JButton[3][3];
@@ -25,16 +27,8 @@ public class GUI extends JFrame implements ActionListener {
 		{
 			for (int j=0; j<3; j++)
 			{
-				
-				if (board.getBoard()[i][j].equals("N"))
-				{
-					buttonarray[i][j] = new JButton("");
-				}
-				else
-				{
-					buttonarray[i][j] = new JButton (board.getBoard()[i][j]);
-				}
-				
+				buttonarray[i][j] = new JButton (board.getBoard()[i][j]);
+
 				buttonarray[i][j].addActionListener(this);
 
 				master.add(buttonarray[i][j]);
@@ -59,26 +53,11 @@ public class GUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		// TODO Auto-generated method stub
 
-		boolean has_N = false;
-		boolean check = false;
-
-		for (int i=0; i<3; i++)
-		{
-			for (int j=0; j<3; j++)
+		if (logic.can_move())
+		{		
+			for (int i=0; i<3; i++)
 			{
-				if (board.getBoard()[i][j].equals("N"))
-					check = true;
-
-				has_N = has_N || check;
-			}
-		}
-
-		for (int i=0; i<3; i++)
-		{
-			for (int j=0; j<3; j++)
-			{
-
-				if (has_N)
+				for (int j=0; j<3; j++)
 				{
 					if (event.getSource().equals(buttonarray[i][j]))
 					{
@@ -86,35 +65,54 @@ public class GUI extends JFrame implements ActionListener {
 						board.Set("X", i, j);					
 						board.Display();
 						System.out.println("--------");
-
-						System.out.println("Computer Move");
-						Logic.computer_move("O", board);
-						board.Display();
-						System.out.println("--------");
 					}
 				}
-
-				else
-				{
-					Logic.check_if_win(board);
-				}
 			}
-		}
 
-		for (int i=0; i<3; i++)
-		{
-			for (int j=0; j<3; j++)
+			for (int i=0; i<3; i++)
 			{
-				if (board.getBoard()[i][j].equals("N"))
-				{
-					buttonarray[i][j].setText("");
-				}
-				else
+				for (int j=0; j<3; j++)
 				{
 					buttonarray[i][j].setText(board.getBoard()[i][j]);
 				}
 			}
+
+			if (logic.can_move())
+			{
+
+				for (int i=0; i<3; i++)
+				{
+					for (int j=0; j<3; j++)
+					{
+						if (event.getSource().equals(buttonarray[i][j]))
+						{
+							System.out.println("Computer Move");
+							logic.computer_move("O");
+							board.Display();
+							System.out.println("--------");
+						}
+					}
+				}
+				
+				for (int i=0; i<3; i++)
+				{
+					for (int j=0; j<3; j++)
+					{
+						buttonarray[i][j].setText(board.getBoard()[i][j]);
+					}
+				}
+			}
+
+			else
+			{
+				if(logic.check_if_win())
+				{
+					System.out.println("WIN!");
+				}
+			}
 		}
+
+
 	}
 
 

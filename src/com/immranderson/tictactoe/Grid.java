@@ -9,7 +9,7 @@ public class Grid {
 		
 		for (int i = 0; i<3; i++)
 			for (int j = 0; j<3; j++)
-				this.grid[i][j] = "N";
+				this.grid[i][j] = " ";
 	}
 	
 	public void Set(String input, int i, int j){

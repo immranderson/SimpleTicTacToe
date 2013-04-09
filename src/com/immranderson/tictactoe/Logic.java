@@ -3,7 +3,13 @@ package com.immranderson.tictactoe;
 public class Logic {
 
 
-	public static boolean check_if_win(Grid board)
+	Grid board;
+	
+	public Logic(Grid board){
+		this.board = board;
+	}
+	
+	public boolean check_if_win()
 	{
 		//Winning Logic
 
@@ -40,63 +46,36 @@ public class Logic {
 		}
 
 		return false;
-
+	}
+	
+	public boolean can_move()
+	{	
+		for (int i=0; i<3; i++)
+		{
+			for (int j=0; j<3; j++)
+			{
+				if (board.getMarkAt(i, j).equals(" "))
+				{
+					System.out.println("Can Move!");
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
-	public static void computer_move(String input, Grid board){
+	public void computer_move(String input){
 		
 		int i = (int)(3*Math.random());
 		int j = (int)(3*Math.random());
-		
-		if (board.getBoard()[i][j].equals("N"))
+
+		if (board.getBoard()[i][j].equals(" "))
 		{
 			board.Set(input, i, j);
 		}
 		else
 		{
-			//System.out.println("Did Nothing");
-			computer_move(input, board);
+			computer_move(input);
 		}
 	}
-
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-
-		Grid board = new Grid();	
-
-		computer_move("X", board);
-		
-		computer_move("O", board);
-		
-		computer_move("X", board);
-		
-		computer_move("O", board);
-		
-		computer_move("X", board);
-		
-		computer_move("O", board);
-		
-		computer_move("X", board);
-		
-		computer_move("O", board);
-		
-		computer_move("X", board);
-		
-		board.Display();
-		
-		if (check_if_win(board))
-		{
-			System.out.println("WINNER");
-		}
-		else
-		{
-			System.out.println("TIE");
-		}
-		
-
-	}
-
 }
-
